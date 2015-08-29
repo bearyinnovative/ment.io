@@ -13,6 +13,7 @@ angular.module('mentio', [])
                 typedTerm: '=mentioTypedTerm',
                 altId: '=mentioId',
                 iframeElement: '=mentioIframeElement',
+                // everything is "Space" here except [a-zA-Z_0-9]
                 requireLeadingSpace: '=mentioRequireLeadingSpace',
                 selectNotFound: '=mentioSelectNotFound',
                 ngModel: '='
@@ -971,7 +972,8 @@ angular.module('mentio')
                         (
                             mostRecentTriggerCharPos === 0 ||
                             !requireLeadingSpace ||
-                            /[\xA0\s]/g.test
+                            // everything is "Space" here except [a-zA-Z_0-9]
+                            !/[\w]/g.test
                             (
                                 effectiveRange.substring(
                                     mostRecentTriggerCharPos - 1,
