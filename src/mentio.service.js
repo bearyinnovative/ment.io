@@ -175,7 +175,7 @@ angular.module('mentio')
 
         // public
         function replaceTriggerText (ctx, targetElement, path, offset, triggerCharSet,
-                text, requireLeadingSpace, hasTrailingSpace) {
+                text, requireLeadingSpace, hasTrailingSpace, withoutTailSpace) {
             resetSelection(ctx, targetElement, path, offset);
 
             var mentionInfo = getTriggerInfo(ctx, triggerCharSet, requireLeadingSpace, true, hasTrailingSpace);
@@ -183,7 +183,9 @@ angular.module('mentio')
             if (mentionInfo !== undefined) {
                 if (selectedElementIsTextAreaOrInput()) {
                     var myField = getDocument(ctx).activeElement;
-                    text = text + ' ';
+                    if (!withoutTailSpace) {
+                      text = text + ' ';
+                    }
                     var startPos = mentionInfo.mentionPosition;
                     var endPos = mentionInfo.mentionPosition + mentionInfo.mentionText.length + 1;
                     myField.value = myField.value.substring(0, startPos) + text +
@@ -192,7 +194,9 @@ angular.module('mentio')
                     myField.selectionEnd = startPos + text.length;
                 } else {
                     // add a space to the end of the pasted text
-                    text = text + '\xA0';
+                    if (!withoutTailSpace) {
+                      text = text + '\xA0';
+                    }
                     pasteHtml(ctx, text, mentionInfo.mentionPosition,
                             mentionInfo.mentionPosition + mentionInfo.mentionText.length + 1);
                 }

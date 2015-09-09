@@ -71,12 +71,12 @@ angular.module('mentio', [])
                     }
                 };
 
-                $scope.replaceText = function (text, hasTrailingSpace) {
+                $scope.replaceText = function (text, hasTrailingSpace, withoutTailSpace) {
                     $scope.hideAll();
 
                     mentioUtil.replaceTriggerText($scope.context(), $scope.targetElement, $scope.targetElementPath,
                         $scope.targetElementSelectedOffset, $scope.triggerCharSet, text, $scope.requireLeadingSpace,
-                        hasTrailingSpace);
+                        hasTrailingSpace, withoutTailSpace);
 
                     if (!hasTrailingSpace) {
                         $scope.setTriggerText('');
@@ -462,7 +462,8 @@ angular.module('mentio', [])
                 items: '=mentioItems',
                 triggerChar: '=mentioTriggerChar',
                 forElem: '=mentioFor',
-                parentScope: '=mentioParentScope'
+                parentScope: '=mentioParentScope',
+                withoutTailSpace: '=mentioWithoutSpace'
             },
             templateUrl: function(tElement, tAttrs) {
                 return tAttrs.mentioTemplateUrl !== undefined ? tAttrs.mentioTemplateUrl : 'mentio-menu.tpl.html';
@@ -489,7 +490,7 @@ angular.module('mentio', [])
                         /* text is a promise, at least our best guess */
                         text.then($scope.parentMentio.replaceText);
                     } else {
-                        $scope.parentMentio.replaceText(text);
+                        $scope.parentMentio.replaceText(text, false, $scope.withoutTailSpace);
                     }
                 };
 
@@ -821,7 +822,7 @@ angular.module('mentio')
 
         // public
         function replaceTriggerText (ctx, targetElement, path, offset, triggerCharSet,
-                text, requireLeadingSpace, hasTrailingSpace) {
+                text, requireLeadingSpace, hasTrailingSpace, withoutTailSpace) {
             resetSelection(ctx, targetElement, path, offset);
 
             var mentionInfo = getTriggerInfo(ctx, triggerCharSet, requireLeadingSpace, true, hasTrailingSpace);
@@ -829,7 +830,9 @@ angular.module('mentio')
             if (mentionInfo !== undefined) {
                 if (selectedElementIsTextAreaOrInput()) {
                     var myField = getDocument(ctx).activeElement;
-                    text = text + ' ';
+                    if (!withoutTailSpace) {
+                      text = text + ' ';
+                    }
                     var startPos = mentionInfo.mentionPosition;
                     var endPos = mentionInfo.mentionPosition + mentionInfo.mentionText.length + 1;
                     myField.value = myField.value.substring(0, startPos) + text +
@@ -838,7 +841,9 @@ angular.module('mentio')
                     myField.selectionEnd = startPos + text.length;
                 } else {
                     // add a space to the end of the pasted text
-                    text = text + '\xA0';
+                    if (!withoutTailSpace) {
+                      text = text + '\xA0';
+                    }
                     pasteHtml(ctx, text, mentionInfo.mentionPosition,
                             mentionInfo.mentionPosition + mentionInfo.mentionText.length + 1);
                 }

@@ -71,12 +71,12 @@ angular.module('mentio', [])
                     }
                 };
 
-                $scope.replaceText = function (text, hasTrailingSpace) {
+                $scope.replaceText = function (text, hasTrailingSpace, withoutTailSpace) {
                     $scope.hideAll();
 
                     mentioUtil.replaceTriggerText($scope.context(), $scope.targetElement, $scope.targetElementPath,
                         $scope.targetElementSelectedOffset, $scope.triggerCharSet, text, $scope.requireLeadingSpace,
-                        hasTrailingSpace);
+                        hasTrailingSpace, withoutTailSpace);
 
                     if (!hasTrailingSpace) {
                         $scope.setTriggerText('');
@@ -462,7 +462,8 @@ angular.module('mentio', [])
                 items: '=mentioItems',
                 triggerChar: '=mentioTriggerChar',
                 forElem: '=mentioFor',
-                parentScope: '=mentioParentScope'
+                parentScope: '=mentioParentScope',
+                withoutTailSpace: '=mentioWithoutSpace'
             },
             templateUrl: function(tElement, tAttrs) {
                 return tAttrs.mentioTemplateUrl !== undefined ? tAttrs.mentioTemplateUrl : 'mentio-menu.tpl.html';
@@ -489,7 +490,7 @@ angular.module('mentio', [])
                         /* text is a promise, at least our best guess */
                         text.then($scope.parentMentio.replaceText);
                     } else {
-                        $scope.parentMentio.replaceText(text);
+                        $scope.parentMentio.replaceText(text, false, $scope.withoutTailSpace);
                     }
                 };
 
