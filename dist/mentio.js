@@ -221,7 +221,7 @@ angular.module('mentio', [])
                                 });
                             }
 
-                            if (event.which === 40 ||
+                            if ((event.which === 40 && !event.shiftKey) ||
                                 (event.which === 78 && event.ctrlKey)) {
                                 event.preventDefault();
                                 activeMenuScope.$apply(function () {
@@ -229,7 +229,7 @@ angular.module('mentio', [])
                                 });
                             }
 
-                            if (event.which === 38 ||
+                            if ((event.which === 38 && !event.shiftKey) ||
                                 (event.which === 80 && event.ctrlKey)) {
                                 event.preventDefault();
                                 activeMenuScope.$apply(function () {
