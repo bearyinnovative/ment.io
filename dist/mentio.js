@@ -236,10 +236,6 @@ angular.module('mentio', [])
                                     activeMenuScope.activatePreviousItem();
                                 });
                             }
-
-                            if (event.which === 37 || event.which === 39) {
-                                event.preventDefault();
-                             }
                         }
                     }
                 );
@@ -317,11 +313,6 @@ angular.module('mentio', [])
                             activeMenuScope.$apply(function () {
                                 activeMenuScope.activatePreviousItem();
                             });
-                            return false;
-                        }
-
-                        if (event.which === 37 || event.which === 39) {
-                            stopEvent(event);
                             return false;
                         }
                     }
