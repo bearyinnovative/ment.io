@@ -1,5 +1,5 @@
 {
-  "name": "ment.io",
+  "name": "@beary/ment.io",
   "version": "0.9.50-bearychat",
   "description": "Mentions for Angular",
   "main": "dist/mentio.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeff-collins/ment.io.git"
+    "url": "https://github.com/bearyinnovative/ment.io.git"
   },
   "keywords": [
     "angular",
